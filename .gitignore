@@ -10,8 +10,6 @@ dist/
 build/*
 build-stamp
 cover/*
-doc/build/
-doc/source/api/
 *.egg-info
 *.egg
 .project
