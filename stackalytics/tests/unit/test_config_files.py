@@ -130,13 +130,6 @@ class TestConfigFiles(testtools.TestCase):
     def test_users_in_alphabetical_order_in_test_file(self):
         self._verify_users_in_alphabetical_order('etc/test_default_data.json')
 
-    def _check_collision(self, storage, user, field, field_name):
-        self.assertNotIn(
-            field, storage,
-            'Duplicate %s %s, collision between: %s and %s'
-            % (field_name, field, storage[field], user))
-        storage[field] = user
-
     def _verify_users_unique(self, file_name):
         users = self._read_file(file_name)['users']
         storage = {}

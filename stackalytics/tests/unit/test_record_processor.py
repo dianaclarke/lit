@@ -360,7 +360,7 @@ class TestRecordProcessor(testtools.TestCase):
                              'Values for key %s do not match' % key)
 
     def make_record_processor(self, users=None, companies=None, releases=None,
-                              repos=None, lp_info=None, lp_user_name=None):
+                              repos=None):
         rp = record_processor.RecordProcessor(make_runtime_storage(
             users=users, companies=companies, releases=releases, repos=repos))
 

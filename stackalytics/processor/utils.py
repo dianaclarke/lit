@@ -16,7 +16,6 @@
 import calendar
 import cgi
 import datetime
-import gzip
 import random
 import re
 import time
@@ -27,7 +26,6 @@ from oslo_log import log as logging
 import requests
 import requests_file
 import six
-import yaml
 
 
 CONF = cfg.CONF
@@ -128,51 +126,11 @@ def do_request(uri, method='get', session=None):
             return _session_request(session, uri, method)
 
 
-def read_uri(uri, session=None):
-    try:
-        return do_request(uri, session=session).text
-    except Exception as e:
-        LOG.warning('Error "%(error)s" retrieving uri %(uri)s',
-                    {'error': e, 'uri': uri})
-
-
 def read_json_from_uri(uri, session=None):
     try:
         return do_request(uri, session=session).json()
     except Exception as e:
         LOG.warning('Error "%(error)s" parsing json from uri %(uri)s',
-                    {'error': e, 'uri': uri})
-
-
-def read_yaml_from_uri(uri):
-    try:
-        return yaml.safe_load(read_uri(uri))
-    except Exception as e:
-        LOG.warning('Error "%(error)s" parsing yaml from uri %(uri)s',
-                    {'error': e, 'uri': uri})
-
-
-def _gzip_decompress(content):
-    if six.PY3:
-        return gzip.decompress(content).decode('utf8')
-    else:
-        gzip_fd = gzip.GzipFile(fileobj=six.moves.StringIO(content))
-        return gzip_fd.read()
-
-
-def read_gzip_from_uri(uri):
-    try:
-        return _gzip_decompress(do_request(uri).content)
-    except Exception as e:
-        LOG.warning('Error "%(error)s" retrieving uri %(uri)s',
-                    {'error': e, 'uri': uri})
-
-
-def get_uri_last_modified(uri):
-    try:
-        return do_request(uri, method='head').headers['last-modified']
-    except Exception as e:
-        LOG.warning('Error "%(error)s" retrieving uri %(uri)s',
                     {'error': e, 'uri': uri})
 
 

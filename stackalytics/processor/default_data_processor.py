@@ -14,8 +14,6 @@
 # limitations under the License.
 
 import collections
-import hashlib
-import json
 import re
 
 from github import MainClass
@@ -32,21 +30,6 @@ CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
 
 GITHUB_URI_PREFIX = r'^github:\/\/'
-
-
-def _check_default_data_change(runtime_storage_inst, default_data):
-    h = hashlib.new('sha1')
-    h.update(json.dumps(default_data))
-    digest = h.hexdigest()
-
-    p_digest = runtime_storage_inst.get_by_key('default_data_digest')
-    if digest == p_digest:
-        LOG.debug('No changes in default data, sha1: %s', digest)
-        return False
-
-    LOG.debug('Default data has changes, sha1: %s', digest)
-    runtime_storage_inst.set_by_key('default_data_digest', digest)
-    return True
 
 
 def _retrieve_project_list_from_sources(project_sources):

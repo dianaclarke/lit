@@ -61,12 +61,6 @@ def _validate_params(params):
     _check_param_in(params, 'metric', parameters.METRIC_TO_RECORD_TYPE, True)
 
 
-def _get_single(params):
-    if params:
-        return params[0]
-    return None
-
-
 def _get_from_human_readable_time(date):
     # format likes 20170401, 2017-04-01 can be supported, only years
     # after 2000 is supported.
@@ -248,10 +242,6 @@ def record_filter(ignore=None):
         return record_filter_decorated_function
 
     return decorator
-
-
-def incremental_filter(result, record, param_id, context):
-    result[getattr(record, param_id)]['metric'] += 1
 
 
 def loc_filter(result, record, param_id, context):
@@ -535,23 +525,5 @@ def response():
             return resp
 
         return response_decorated_function
-
-    return decorator
-
-
-def query_filter(query_param='query'):
-    def decorator(f):
-        @functools.wraps(f)
-        def query_filter_decorated_function(*args, **kwargs):
-
-            query = flask.request.args.get(query_param)
-            if query:
-                kwargs['query_filter'] = lambda x: x.lower().find(query) >= 0
-            else:
-                kwargs['query_filter'] = lambda x: True
-
-            return f(*args, **kwargs)
-
-        return query_filter_decorated_function
 
     return decorator
