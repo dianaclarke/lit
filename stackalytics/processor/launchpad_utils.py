@@ -101,22 +101,6 @@ def lp_module_exists(module):
     return request.status_code != 404
 
 
-def lp_blueprint_generator(module):
-    uri = LP_URI_DEVEL % (module + '/all_specifications')
-    while uri:
-        LOG.debug('Reading chunk from uri %s', uri)
-        chunk = utils.read_json_from_uri(uri, session=launchpad_session)
-
-        if not chunk:
-            LOG.warning('No data was read from uri %s', uri)
-            break
-
-        for record in chunk['entries']:
-            yield record
-
-        uri = chunk.get('next_collection_link')
-
-
 def lp_bug_generator(module, modified_since):
     uri = LP_URI_DEVEL % (module + '?ws.op=searchTasks')
     for status in BUG_STATUSES:

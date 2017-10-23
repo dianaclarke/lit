@@ -108,7 +108,7 @@ def _generate_commits():
             'primary_key': uuidutils.generate_uuid(),
             'author_email': 'john_doe@ibm.com', 'company_name': 'IBM',
             'lines_deleted': 1, 'week': 2275,
-            'blueprint_id': None, 'bug_id': u'1212953',
+            'bug_id': u'1212953',
             'files_changed': 1, 'author_name': u'John Doe',
             'date': 1376737923, 'launchpad_id': u'john_doe',
             'branches': set([u'master']),

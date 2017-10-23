@@ -73,8 +73,6 @@ CO_AUTHOR_PATTERN = re.compile(CO_AUTHOR_PATTERN_RAW, re.IGNORECASE)
 
 MESSAGE_PATTERNS = {
     'bug_id': re.compile(r'bug[\s#:]*(?P<id>\d+)', re.IGNORECASE),
-    'blueprint_id': re.compile(r'\b(?:blueprint|bp)\b[ \t]*[#:]?[ \t]*'
-                               r'(?P<id>[a-z0-9-]+)', re.IGNORECASE),
     'change_id': re.compile('Change-Id: (?P<id>I[0-9a-f]{40})', re.IGNORECASE),
     'coauthor': re.compile(r'(?:Co-Authored-By|Also-By|Co-Author):'
                            r'\s*(?P<id>%s)\s' % CO_AUTHOR_PATTERN_RAW,
@@ -257,11 +255,6 @@ class Git(Vcs):
             if commit['release'] == 'ignored':
                 # drop commits that are marked by 'ignored' release
                 continue
-
-            if 'blueprint_id' in commit:
-                commit['blueprint_id'] = [(commit['module'] + ':' + bp_name)
-                                          for bp_name
-                                          in commit['blueprint_id']]
 
             if 'coauthor' in commit:
                 verified_coauthors = []

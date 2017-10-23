@@ -279,7 +279,7 @@ Engineers who has metric 0 are omitted. For reviews also added column with revie
 
 **Description**
 
-Depending on selected metric Activity log contains commits, reviews, emails or blueprints.
+Depending on selected metric Activity log contains commits or reviews.
 
 **Request**
 
@@ -309,7 +309,6 @@ page_size is 10.
                 "author_email": "chuck.short@canonical.com",
                 "module": "ceilometer",
                 "release": "havana",
-                "blueprint_id": [],
                 "bug_id": [],
                 "date": 1370134263,
                 "branches": "master",
@@ -334,8 +333,7 @@ page_size is 10.
 
 **Description**
 
-Get contribution summary: number of commits, locs, emails, drafted and completed blueprints,
-review marks with distribution per mark (-2..+2).
+Get contribution summary: number of commits, etc.
 
 **Request**
 
@@ -352,10 +350,8 @@ review marks with distribution per mark (-2..+2).
     {
         "contribution": {
             "loc": 252,
-            "new_blueprint_count": 2,
             "email_count": 7,
             "commit_count": 5,
-            "competed_blueprint_count": 0,
             "marks": {
                 "0": 0,
                 "1": 12,

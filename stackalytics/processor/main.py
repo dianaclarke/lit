@@ -25,7 +25,6 @@ from stackalytics.processor import bps
 from stackalytics.processor import config
 from stackalytics.processor import default_data_processor
 from stackalytics.processor import governance
-from stackalytics.processor import lp
 from stackalytics.processor import mps
 from stackalytics.processor import rcs
 from stackalytics.processor import record_processor
@@ -79,18 +78,6 @@ def _get_repo_branches(repo):
     return ({repo.get('default_branch', 'master')} |
             set(r['branch'] for r in repo.get('releases', [])
                 if 'branch' in r))
-
-
-def _process_repo_blueprints(repo, runtime_storage_inst,
-                             record_processor_inst):
-    LOG.info('Processing blueprints for repo: %s', repo['uri'])
-
-    bp_iterator = lp.log(repo)
-    bp_iterator_typed = _record_typer(bp_iterator, 'bp')
-    processed_bp_iterator = record_processor_inst.process(bp_iterator_typed)
-
-    runtime_storage_inst.set_records(processed_bp_iterator,
-                                     utils.merge_records)
 
 
 def _process_repo_bugs(repo, runtime_storage_inst, record_processor_inst):
@@ -166,8 +153,6 @@ def _process_repo(repo, runtime_storage_inst, record_processor_inst,
     _process_repo_vcs(repo, runtime_storage_inst, record_processor_inst)
 
     _process_repo_bugs(repo, runtime_storage_inst, record_processor_inst)
-
-    _process_repo_blueprints(repo, runtime_storage_inst, record_processor_inst)
 
     if 'has_gerrit' in repo:
         _process_repo_reviews(repo, runtime_storage_inst,

@@ -38,7 +38,6 @@ class CachedMemoryStorage(MemoryStorage):
         self.user_id_index = {}
         self.company_index = {}
         self.release_index = {}
-        self.blueprint_id_index = {}
         self.company_name_mapping = {}
         self.day_index = {}
         self.module_release_index = {}
@@ -59,11 +58,6 @@ class CachedMemoryStorage(MemoryStorage):
         self.records[record.record_id] = record
         for key, index in six.iteritems(self.indexes):
             self._add_to_index(index, record, key)
-        for bp_id in (record.blueprint_id or []):
-            if bp_id in self.blueprint_id_index:
-                self.blueprint_id_index[bp_id].add(record.record_id)
-            else:
-                self.blueprint_id_index[bp_id] = set([record.record_id])
 
         record_day = utils.timestamp_to_day(record.date)
         if record_day in self.day_index:
@@ -132,10 +126,6 @@ class CachedMemoryStorage(MemoryStorage):
 
     def get_record_ids_by_releases(self, releases):
         return self._get_record_ids_from_index(releases, self.release_index)
-
-    def get_record_ids_by_blueprint_ids(self, blueprint_ids):
-        return self._get_record_ids_from_index(blueprint_ids,
-                                               self.blueprint_id_index)
 
     def get_record_ids_by_days(self, days):
         return self._get_record_ids_from_index(days, self.day_index)

@@ -31,8 +31,6 @@ METRIC_LABELS = {
     'loc': 'Lines of code',
     'commits': 'Commits',
     'marks': 'Reviews',
-    'bpd': 'Drafted Blueprints',
-    'bpc': 'Completed Blueprints',
     'filed-bugs': 'Filed Bugs',
     'resolved-bugs': 'Resolved Bugs',
     'person-day': "Person-day effort",
@@ -43,18 +41,15 @@ METRIC_TO_RECORD_TYPE = {
     'loc': ['commit'],
     'commits': ['commit'],
     'marks': ['mark'],
-    'bpd': ['bpd'],
-    'bpc': ['bpc'],
     'filed-bugs': ['bugf'],
     'resolved-bugs': ['bugr'],
     'members': ['member'],
-    'person-day': ['mark', 'patch', 'bpd', 'bugf'],
+    'person-day': ['mark', 'patch', 'bugf'],
     'patches': ['patch'],
 }
 
 FILTER_PARAMETERS = ['release', 'project_type', 'module', 'company', 'user_id',
-                     'metric', 'start_date', 'end_date', 'blueprint_id',
-                     'core_in']
+                     'metric', 'start_date', 'end_date', 'core_in']
 
 DEFAULT_RECORDS_LIMIT = 10
 DEFAULT_STATIC_ACTIVITY_SIZE = 100

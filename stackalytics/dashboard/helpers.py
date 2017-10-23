@@ -43,7 +43,6 @@ def _extend_record_common_fields(record):
     record['module_link'] = make_link(
         record['module'], '/',
         {'module': record['module'], 'company': '', 'user_id': ''})
-    record['blueprint_id_count'] = len(record.get('blueprint_id', []))
     record['bug_id_count'] = len(record.get('bug_id', []))
 
     for coauthor in record.get('coauthor') or []:
@@ -82,13 +81,6 @@ def extend_record(record):
         review = vault.get_memory_storage().get_record_by_primary_key(
             record['review_id'])
         _extend_by_parent_info(record, review, 'parent_')
-    elif record['record_type'] in ['bpd', 'bpc']:
-        record['summary'] = utils.format_text(record['summary'])
-        if record.get('mention_count'):
-            record['mention_date_str'] = format_datetime(
-                record['mention_date'])
-        record['blueprint_link'] = make_blueprint_link(record['module'],
-                                                       record['name'])
     elif record['record_type'] in ['bugr', 'bugf']:
         record['number'] = record['web_link'].split('/')[-1]
         record['title'] = filter_bug_title(record['title'])
@@ -185,8 +177,6 @@ def get_contribution_summary(records):
     marks = dict((m, 0) for m in [-2, -1, 0, 1, 2, 'A', 'WIP', 'x', 's'])
     commit_count = 0
     loc = 0
-    drafted_blueprint_count = 0
-    completed_blueprint_count = 0
     filed_bug_count = 0
     resolved_bug_count = 0
     patch_set_count = 0
@@ -212,10 +202,6 @@ def get_contribution_summary(records):
             elif record.type[:5] == 'Self-':
                 value = 's'
             marks[value] += 1
-        elif record_type == 'bpd':
-            drafted_blueprint_count += 1
-        elif record_type == 'bpc':
-            completed_blueprint_count += 1
         elif record_type == 'bugf':
             filed_bug_count += 1
         elif record_type == 'bugr':
@@ -228,8 +214,6 @@ def get_contribution_summary(records):
                 abandoned_change_requests_count += 1
 
     result = {
-        'drafted_blueprint_count': drafted_blueprint_count,
-        'completed_blueprint_count': completed_blueprint_count,
         'commit_count': commit_count,
         'loc': loc,
         'marks': marks,
@@ -271,21 +255,12 @@ def make_link(title, uri=None, options=None):
     return '<a href="%(uri)s">%(title)s</a>' % {'uri': uri, 'title': title}
 
 
-def make_blueprint_link(module, name):
-    uri = '/report/blueprint/' + module + '/' + name
-    return '<a href="%(uri)s">%(title)s</a>' % {'uri': uri, 'title': name}
-
-
 def make_commit_message(record):
     s = record['message']
-    module = record['module']
 
     s = utils.format_text(s)
 
     # insert links
-    s = re.sub(re.compile('(blueprint\s+)([\w-]+)', flags=re.IGNORECASE),
-               r'\1<a href="https://blueprints.launchpad.net/' +
-               module + r'/+spec/\2" class="ext_link">\2</a>', s)
     s = re.sub(re.compile('(bug[\s#:]*)([\d]{5,7})', flags=re.IGNORECASE),
                r'\1<a href="https://bugs.launchpad.net/bugs/\2" '
                r'class="ext_link">\2</a>', s)

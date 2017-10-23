@@ -264,10 +264,6 @@ def merge_records(original, new):
     return need_update
 
 
-def get_blueprint_id(module, name):
-    return module + ':' + name
-
-
 def make_bug_id(bug_id, module, release=None):
     if release:
         return '/'.join([module, release, bug_id])

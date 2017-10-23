@@ -35,8 +35,7 @@ LOG = logging.getLogger(__name__)
 RECORD_FIELDS_FOR_AGGREGATE = ['record_id', 'primary_key', 'record_type',
                                'company_name', 'module', 'user_id', 'release',
                                'date', 'week', 'author_name', 'loc', 'type',
-                               'disagreement', 'value', 'status',
-                               'blueprint_id']
+                               'disagreement', 'value', 'status']
 
 CompactRecord = collections.namedtuple('CompactRecord',
                                        RECORD_FIELDS_FOR_AGGREGATE)

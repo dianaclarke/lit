@@ -6,7 +6,6 @@
 
 {% set show_company_breakdown = (not company) and (not user_id) %}
 {% set show_engineer_breakdown = (not user_id) %}
-{% set show_bp_breakdown = (metric in ['bpd', 'bpc']) %}
 {% set show_module_breakdown = (not module) %}
 {% set show_user_activity = (user_id) %}
 {% set show_module_activity = (module) and (not user_id) %}
@@ -47,10 +46,6 @@
         {% else %}
         renderTableAndChart("/api/1.0/stats/engineers", "engineer_container", "engineer_table", "engineer_chart", "user_id");
         {% endif %}
-    {% endif %}
-    {% if show_bp_breakdown %}
-    renderTableAndChart("/api/1.0/stats/bp", "bp_container", "bp_table", "bp_chart", "name",
-            ["index", "link", "status", "date", "metric"]);
     {% endif %}
     {% if show_module_breakdown %}
     renderTableAndChart("/api/1.0/stats/modules", "module_container", "module_table", "module_chart", "module");
@@ -146,33 +141,6 @@
 
     {% if show_module_details %}
         {{ module_details.show_module_details(module=module) }}
-    {% endif %}
-
-    {% if show_bp_breakdown %}
-    <div id="bp_container">
-    <h2>Blueprint popularity</h2>
-
-    <div style="font-style: italic;">
-        This metric shows how many times a blueprint was mentioned in emails and commit messages.
-    </div>
-
-    <div id="bp_chart" style="width: 100%; height: 350px; margin-bottom: 1em;"></div>
-
-    <table id="bp_table" class="display">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Blueprint</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Mentions</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <div class="spacer"></div>
-    </div>
     {% endif %}
 
     {% if show_contribution_on_right %}

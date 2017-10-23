@@ -9,9 +9,3 @@ Bug tracking
 ------------
 
 Report Stackalytics bugs at https://bugs.launchpad.net/stackalytics
-
-Feature requests (Blueprints)
------------------------------
-
-Stackalytics uses Launchpad Blueprints to track feature requests. Blueprints are at
-https://blueprints.launchpad.net/stackalytics.

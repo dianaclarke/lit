@@ -1,4 +1,4 @@
-{% macro show_activity_log(user_id=None, company=None, blueprint_id=None,
+{% macro show_activity_log(user_id=None, company=None,
 show_record_type=True, show_user_gravatar=True, gravatar_size=32, show_all=True,
 show_twitter=False) -%}
 
@@ -34,9 +34,6 @@ show_twitter=False) -%}
     {% endif %}
     {% if company %}
         uri_options["company"] = "{{ company|safe }}";
-    {% endif %}
-    {% if blueprint_id %}
-        uri_options["blueprint_id"] = "{{ blueprint_id }}";
     {% endif %}
 
     function load_activity(extra_options) {
@@ -156,17 +153,6 @@ show_twitter=False) -%}
         {%elif record_type == "patch" %}
             <div class="header">Patch #${number} &ldquo;${parent_subject}&rdquo;</div>
             <div>Change Id: <a href="${parent_url}" target="_blank">${review_id}</a></div>
-        {%elif ((record_type == "bpd") || (record_type == "bpc")) %}
-            <div class="header">Blueprint &ldquo;${title}&rdquo; ({%html blueprint_link %})</div>
-            <div class="message">${summary}</div>
-
-            <div>Priority: <span class="specpriority${priority}">${priority}</span></div>
-            <div>Status: <span class="status${lifecycle_status}">${lifecycle_status}</span>
-                (<span class="specstatus${definition_status}">${definition_status}</span>,
-                <span class="specdelivery${implementation_status}">${implementation_status}</span>)</div>
-            {%if mention_count %}
-            <div><b>Mention count: ${mention_count}, last mention on ${mention_date_str}</b></div>
-            {%/if%}
         {%elif ((record_type == "bugf") || (record_type == "bugr")) %}
             <div class="header">Bug &ldquo;${title}&rdquo; (<a href="${web_link}" class="ext_link">${number}</a>)</div>
             <div>Status: <span class="status${status_class}">${status}</span></div>

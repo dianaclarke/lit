@@ -129,27 +129,6 @@
           <div>Change Id: <a href="{{ record.parent_url }}"
                              target="_blank">{{ record.review_id }}</a></div>
 
-        {% elif ((record.record_type == "bpd") or (record.record_type == "bpc")) %}
-          <div class="header">Blueprint &ldquo;{{ record.title }}&rdquo;
-            ({{ blueprint_link | safe }})
-          </div>
-          <div class="tweet">{{ record.summary }}</div>
-
-          <div>Priority: <span
-              class="specpriority{{ record.priority }}">{{ record.priority }}</span>
-          </div>
-          <div>Status: <span
-              class="status{{ record.lifecycle_status }}">{{ record.lifecycle_status }}</span>
-            (<span
-                class="specstatus{{ record.definition_status }}">{{ record.definition_status }}</span>,
-            <span
-                class="specdelivery{{ record.implementation_status }}">{{ record.implementation_status }}</span>)
-          </div>
-          {% if mention_count %}
-            <div><b>Mention count: {{ record.mention_count }}, last mention
-              on {{ record.mention_date_str }}</b></div>
-          {% endif %}
-
         {% elif ((record.record_type == "bugf") or (record.record_type == "bugr")) %}
           <div class="header">Bug &ldquo;{{ record.title }}&rdquo; (<a
               href="{{ record.web_link }}"

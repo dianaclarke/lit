@@ -232,13 +232,6 @@ def record_filter(ignore=None):
                             memory_storage_inst.get_record_ids_by_types(
                                 parameters.METRIC_TO_RECORD_TYPE[m]))
 
-            blueprint_id = params['blueprint_id']
-            if blueprint_id:
-                record_ids = _intersect(
-                    record_ids,
-                    memory_storage_inst.get_record_ids_by_blueprint_ids(
-                        blueprint_id))
-
             start_date = params['start_date']
             end_date = params['end_date']
 
@@ -360,8 +353,6 @@ def aggregate_filter():
                 'commits': (None, None),
                 'loc': (loc_filter, None),
                 'marks': (mark_filter, mark_finalize),
-                'bpd': (incremental_filter, None),
-                'bpc': (incremental_filter, None),
                 'filed-bugs': (incremental_filter, None),
                 'resolved-bugs': (incremental_filter, None),
                 'members': (incremental_filter, None),

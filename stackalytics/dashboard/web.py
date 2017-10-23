@@ -370,38 +370,6 @@ def get_members(records, **kwargs):
     return response
 
 
-@app.route('/api/1.0/stats/bp')
-@decorators.exception_handler()
-@decorators.response()
-@decorators.cached()
-@decorators.jsonify('stats')
-@decorators.record_filter()
-def get_bpd(records, **kwargs):
-    result = []
-    for record in records:
-        if record.record_type in ['bpd', 'bpc']:
-            record = vault.extend_record(record)
-            mention_date = record.get('mention_date')
-            if mention_date:
-                date = helpers.format_date(mention_date)
-            else:
-                date = 'never'
-            result.append({
-                'date': date,
-                'status': record['lifecycle_status'],
-                'metric': record.get('mention_count') or 0,
-                'id': record['name'],
-                'name': record['name'],
-                'link': helpers.make_blueprint_link(record['module'],
-                                                    record['name'])
-            })
-
-    result.sort(key=lambda x: x['metric'], reverse=True)
-    utils.add_index(result)
-
-    return result
-
-
 @app.route('/api/1.0/users')
 @decorators.exception_handler()
 @decorators.response()

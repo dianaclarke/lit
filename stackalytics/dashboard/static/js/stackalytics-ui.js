@@ -290,8 +290,6 @@ function extendWithTweet(record) {
         tweet = record.author_name + " submitted «" + record.parent_subject + "» in " + record.module;
     } else if (record.record_type == "email") {
         tweet = record.author_name + " emails about " + record.subject;
-    } else if (record.record_type == "bpd" || record.record_type == "bpc") {
-        tweet = "Blueprint «" + record.title + "» in " + record.module;
     } else if (record.record_type == "bugf" || record.record_type == "bugr") {
         tweet = record.status + " bug «" + record.title + "» in " + record.module + " " + record.web_link;
     } else if (record.record_type == "tr") {

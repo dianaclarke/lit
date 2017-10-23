@@ -34,27 +34,6 @@ FIRST_MEMBER_DATE = "2012-Jul-18"
 blueprint = flask.Blueprint('reports', __name__, url_prefix='/report')
 
 
-@blueprint.route('/blueprint/<module>/<blueprint_name>')
-@decorators.templated()
-@decorators.exception_handler()
-def blueprint_summary(module, blueprint_name):
-    blueprint_id = utils.get_blueprint_id(module, blueprint_name)
-    bpd = vault.get_memory_storage().get_record_by_primary_key(
-        'bpd:' + blueprint_id)
-    if not bpd:
-        flask.abort(404)
-        return
-
-    bpd = helpers.extend_record(bpd)
-    record_ids = vault.get_memory_storage().get_record_ids_by_blueprint_ids(
-        [blueprint_id])
-    activity = [helpers.extend_record(record) for record in
-                vault.get_memory_storage().get_records(record_ids)]
-    activity.sort(key=lambda x: x['date'], reverse=True)
-
-    return {'blueprint': bpd, 'activity': activity}
-
-
 def _get_day(timestamp, time_now):
     return int((time_now - timestamp) / 60 / 60 / 24)
 
@@ -216,7 +195,7 @@ def _get_activity_summary(record_ids):
     memory_storage_inst = vault.get_memory_storage()
 
     record_ids_by_type = memory_storage_inst.get_record_ids_by_types(
-        ['mark', 'patch', 'bpd', 'bpc'])
+        ['mark', 'patch'])
 
     record_ids &= record_ids_by_type
     punch_card_data = _get_punch_card_data(

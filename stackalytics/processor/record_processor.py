@@ -334,48 +334,6 @@ class RecordProcessor(object):
         elif record['module'] in alias_module_map:
             record['module'] = alias_module_map[record['module']]
 
-    def _process_email(self, record):
-        record['primary_key'] = record['message_id']
-        record['author_email'] = record['author_email'].lower()
-
-        self._update_record_and_user(record)
-        self._guess_module(record)
-
-        if not record.get('blueprint_id'):
-            del record['body']
-        elif len(record['body']) > 4000:
-            record['body'] = record['body'][:4000] + '...'
-
-        yield record
-
-    def _process_blueprint(self, record):
-        bpd_author = record.get('drafter') or record.get('owner')
-
-        bpd = dict([(k, v) for k, v in six.iteritems(record)
-                    if k.find('_link') < 0])
-        bpd['record_type'] = 'bpd'
-        bpd['primary_key'] = 'bpd:' + record['id']
-        bpd['launchpad_id'] = bpd_author
-        bpd['date'] = record['date_created']
-        bpd['web_link'] = record.get('web_link')
-
-        self._update_record_and_user(bpd)
-
-        yield bpd
-
-        if (record.get('assignee') and record['date_completed'] and
-                record.get('implementation_status') == 'Implemented'):
-            bpc = dict([(k, v) for k, v in six.iteritems(record)
-                        if k.find('_link') < 0])
-            bpc['record_type'] = 'bpc'
-            bpc['primary_key'] = 'bpc:' + record['id']
-            bpc['launchpad_id'] = record['assignee']
-            bpc['date'] = record['date_completed']
-
-            self._update_record_and_user(bpc)
-
-            yield bpc
-
     def _process_bug(self, record):
 
         bug_created = record.copy()
@@ -452,8 +410,6 @@ class RecordProcessor(object):
         PROCESSORS = {
             'commit': self._process_commit,
             'review': self._process_review,
-            'email': self._process_email,
-            'bp': self._process_blueprint,
             'bug': self._process_bug,
             'member': self._process_member,
         }
@@ -528,70 +484,6 @@ class RecordProcessor(object):
                                       '%(record)s', {'date': old_date,
                                                      'record': record})
                             yield record
-
-        yield record_handler_pass_2
-
-    def _update_blueprints_with_mention_info(self):
-        LOG.info('Process blueprints and calculate mention info')
-
-        valid_blueprints = {}
-        mentioned_blueprints = {}
-
-        def record_handler_pass_1(record):
-            for bp in record.get('blueprint_id', []):
-                if bp in mentioned_blueprints:
-                    mentioned_blueprints[bp]['count'] += 1
-                    if record['date'] > mentioned_blueprints[bp]['date']:
-                        mentioned_blueprints[bp]['date'] = record['date']
-                else:
-                    mentioned_blueprints[bp] = {
-                        'count': 1,
-                        'date': record['date']
-                    }
-            if record['record_type'] in ['bpd', 'bpc']:
-                valid_blueprints[record['id']] = {
-                    'primary_key': record['primary_key'],
-                    'count': 0,
-                    'date': record['date']
-                }
-
-        yield record_handler_pass_1
-
-        for bp_name, bp in six.iteritems(valid_blueprints):
-            if bp_name in mentioned_blueprints:
-                bp['count'] = mentioned_blueprints[bp_name]['count']
-                bp['date'] = mentioned_blueprints[bp_name]['date']
-            else:
-                bp['count'] = 0
-                bp['date'] = 0
-
-        LOG.info('Process blueprints and calculate mention info: pass 2')
-
-        def record_handler_pass_2(record):
-            need_update = False
-
-            valid_bp = set([])
-            for bp in record.get('blueprint_id', []):
-                if bp in valid_blueprints:
-                    valid_bp.add(bp)
-                else:
-                    LOG.debug('Update record %s: removed invalid bp: %s',
-                              record['primary_key'], bp)
-                    need_update = True
-            record['blueprint_id'] = list(valid_bp)
-
-            if record['record_type'] in ['bpd', 'bpc']:
-                bp = valid_blueprints[record['id']]
-                if ((record.get('mention_count') != bp['count']) or
-                        (record.get('mention_date') != bp['date'])):
-                    record['mention_count'] = bp['count']
-                    record['mention_date'] = bp['date']
-                    LOG.debug('Update record %s: mention stats: (%s:%s)',
-                              record['primary_key'], bp['count'], bp['date'])
-                    need_update = True
-
-            if need_update:
-                yield record
 
         yield record_handler_pass_2
 
@@ -737,7 +629,6 @@ class RecordProcessor(object):
             functools.partial(self._update_records_with_releases,
                               release_index),
             self._update_commits_with_module_alias,
-            self._update_blueprints_with_mention_info,
             self._determine_core_contributors,
             self._update_members_company_name,
             self._update_marks_with_disagreement,
