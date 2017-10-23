@@ -291,10 +291,3 @@ def get_single_plus_two_reviews_report(records, **kwargs):
                              'project': review['project']})
 
     return response
-
-
-@blueprint.route('/driverlog')
-@decorators.templated()
-@decorators.exception_handler()
-def driverlog():
-    pass
