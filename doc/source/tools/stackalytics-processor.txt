@@ -1,5 +1,4 @@
 usage: stackalytics-processor [-h] [--config-dir DIR] [--config-file PATH]
-                              [--corrections-uri CORRECTIONS_URI]
                               [--days_to_update_members DAYS_TO_UPDATE_MEMBERS]
                               [--debug] [--default-data-uri DEFAULT_DATA_URI]
                               [--fetching-user-source FETCHING_USER_SOURCE]
@@ -33,8 +32,6 @@ optional arguments:
   --config-file PATH    Path to a config file to use. Multiple config files
                         can be specified, with values in later files taking
                         precedence. Defaults to None.
-  --corrections-uri CORRECTIONS_URI
-                        The address of file with corrections data
   --days_to_update_members DAYS_TO_UPDATE_MEMBERS
                         Number of days to update members
   --debug, -d           If set to true, the logging level will be set to DEBUG

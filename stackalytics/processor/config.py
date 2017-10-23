@@ -34,10 +34,6 @@ PROCESSOR_OPTS = [
                help='The folder that holds all project sources to analyze'),
     cfg.IntOpt('days_to_update_members', default=30,
                help='Number of days to update members'),
-    cfg.StrOpt('corrections-uri',
-               default=('https://git.openstack.org/cgit/'
-                        'openstack/stackalytics/plain/etc/corrections.json'),
-               help='The address of file with corrections data'),
     cfg.StrOpt('review-uri', default='gerrit://review.openstack.org',
                help='URI of review system'),
     cfg.StrOpt('git-base-uri', default='git://git.openstack.org',

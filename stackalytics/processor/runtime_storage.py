@@ -38,9 +38,6 @@ class RuntimeStorage(object):
     def set_records(self, records_iterator):
         pass
 
-    def apply_corrections(self, corrections_iterator):
-        pass
-
     def get_by_key(self, key):
         pass
 
@@ -103,25 +100,6 @@ class MemcachedStorage(RuntimeStorage):
                 self._set_record_count(record_id + 1)
 
             self._commit_update(record_id)
-
-    def apply_corrections(self, corrections_iterator):
-        self._build_index_lazily()
-        for correction in corrections_iterator:
-            if correction['primary_key'] not in self.record_index:
-                continue
-
-            record_id = self.record_index[correction['primary_key']]
-            original = self.get_by_key(self._get_record_name(record_id))
-            need_update = False
-
-            for field, value in six.iteritems(correction):
-                if (field not in original) or (original[field] != value):
-                    need_update = True
-                    original[field] = value
-
-            if need_update:
-                self.set_by_key(self._get_record_name(record_id), original)
-                self._commit_update(record_id)
 
     def inc_user_count(self):
         return self.memcached.incr('user:count')

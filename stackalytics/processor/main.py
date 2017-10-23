@@ -247,22 +247,6 @@ def process(runtime_storage_inst, record_processor_inst):
     _post_process_records(record_processor_inst, repos)
 
 
-def apply_corrections(uri, runtime_storage_inst):
-    LOG.info('Applying corrections from uri %s', uri)
-    corrections = utils.read_json_from_uri(uri)
-    if not corrections:
-        LOG.error('Unable to read corrections from uri: %s', uri)
-        return
-
-    valid_corrections = []
-    for c in corrections['corrections']:
-        if 'primary_key' in c:
-            valid_corrections.append(c)
-        else:
-            LOG.warning('Correction misses primary key: %s', c)
-    runtime_storage_inst.apply_corrections(valid_corrections)
-
-
 def process_project_list(runtime_storage_inst):
     module_groups = runtime_storage_inst.get_by_key('module_groups') or {}
     releases = runtime_storage_inst.get_by_key('releases') or {}
@@ -323,8 +307,6 @@ def main():
         runtime_storage_inst)
 
     process(runtime_storage_inst, record_processor_inst)
-
-    apply_corrections(CONF.corrections_uri, runtime_storage_inst)
 
     # long operation should be the last
     update_members(runtime_storage_inst, record_processor_inst)

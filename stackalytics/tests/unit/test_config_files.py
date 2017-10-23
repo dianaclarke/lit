@@ -78,11 +78,6 @@ class TestConfigFiles(testtools.TestCase):
         if diff_msg:
             self.fail(msg + '\n' + diff_msg)
 
-    def test_corrections(self):
-        corrections = self._read_file('etc/corrections.json')
-        schema = self._read_file('etc/corrections.schema.json')
-        jsonschema.validate(corrections, schema)
-
     def _verify_default_data_duplicate_keys(self, file_name):
         try:
             json.loads(self._read_raw_file(file_name),
