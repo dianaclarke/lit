@@ -29,7 +29,7 @@ PROCESSOR_OPTS = [
                        'openstack/stackalytics/plain/etc/default_data.json',
                help='URI for default data. A local file can be used with the '
                     'prefix "file://". For example, '
-                    'default_data_uri = file:///path/to/default_data.json'),
+                    'default-data-uri = file:///path/to/default_data.json'),
     cfg.StrOpt('sources-root', default='/var/local/stackalytics',
                help='The folder that holds all project sources to analyze'),
     cfg.IntOpt('days_to_update_members', default=30,
