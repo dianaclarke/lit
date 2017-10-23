@@ -156,27 +156,6 @@ show_twitter=False) -%}
         {%elif record_type == "patch" %}
             <div class="header">Patch #${number} &ldquo;${parent_subject}&rdquo;</div>
             <div>Change Id: <a href="${parent_url}" target="_blank">${review_id}</a></div>
-        {%elif record_type == "email" %}
-            <div class="header">
-            {%if email_link != "" %}
-            <a href='${email_link}'>
-            {%/if%}
-            Email &ldquo;${subject}&rdquo;
-            {%if email_link != "" %}
-            </a>
-            {%/if%}
-            </div>
-            {%if blueprint_id_count %}
-            <div>Mentions blueprints:
-            {%each( index, value ) blueprint_links %}
-                {%html value %}
-            {%/each%}
-            </div>
-            {%/if%}
-            {%if body %}
-            <div>Email: <span class="expand-button" id="button-${record_id}">[+]</span></div>
-            <div id="content-button-${record_id}" class="message" style="display:none;">${body}</div>
-            {%/if%}
         {%elif ((record_type == "bpd") || (record_type == "bpc")) %}
             <div class="header">Blueprint &ldquo;${title}&rdquo; ({%html blueprint_link %})</div>
             <div class="message">${summary}</div>

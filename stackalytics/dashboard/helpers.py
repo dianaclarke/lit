@@ -82,13 +82,6 @@ def extend_record(record):
         review = vault.get_memory_storage().get_record_by_primary_key(
             record['review_id'])
         _extend_by_parent_info(record, review, 'parent_')
-    elif record['record_type'] == 'email':
-        record['email_link'] = record.get('email_link') or ''
-        record['blueprint_links'] = []
-        for bp_id in record.get('blueprint_id', []):
-            bp_module, bp_name = bp_id.split(':')
-            record['blueprint_links'].append(
-                make_blueprint_link(bp_module, bp_name))
     elif record['record_type'] in ['bpd', 'bpc']:
         record['summary'] = utils.format_text(record['summary'])
         if record.get('mention_count'):
@@ -194,7 +187,6 @@ def get_contribution_summary(records):
     loc = 0
     drafted_blueprint_count = 0
     completed_blueprint_count = 0
-    email_count = 0
     filed_bug_count = 0
     resolved_bug_count = 0
     patch_set_count = 0
@@ -220,8 +212,6 @@ def get_contribution_summary(records):
             elif record.type[:5] == 'Self-':
                 value = 's'
             marks[value] += 1
-        elif record_type == 'email':
-            email_count += 1
         elif record_type == 'bpd':
             drafted_blueprint_count += 1
         elif record_type == 'bpc':
@@ -241,7 +231,6 @@ def get_contribution_summary(records):
         'drafted_blueprint_count': drafted_blueprint_count,
         'completed_blueprint_count': completed_blueprint_count,
         'commit_count': commit_count,
-        'email_count': email_count,
         'loc': loc,
         'marks': marks,
         'filed_bug_count': filed_bug_count,

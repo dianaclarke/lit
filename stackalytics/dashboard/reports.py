@@ -216,7 +216,7 @@ def _get_activity_summary(record_ids):
     memory_storage_inst = vault.get_memory_storage()
 
     record_ids_by_type = memory_storage_inst.get_record_ids_by_types(
-        ['mark', 'patch', 'email', 'bpd', 'bpc'])
+        ['mark', 'patch', 'bpd', 'bpc'])
 
     record_ids &= record_ids_by_type
     punch_card_data = _get_punch_card_data(

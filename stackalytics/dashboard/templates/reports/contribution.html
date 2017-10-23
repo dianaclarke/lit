@@ -24,7 +24,7 @@
 
         $(document).ready(function () {
             var table_column_names = ["index", "link", "metric", "-2", "-1", "1", "2", "A", "x", "positive_ratio", "disagreements", "disagreement_ratio",
-                                      "review_ratio", "commit", "email"];
+                                      "review_ratio", "commit"];
             var table_id = "review_stats_table";
 
             $.ajax({
@@ -49,8 +49,7 @@
                         'core_reviewers': 0,
                         'commits': 0,
                         'reviews': 0,
-                        'patch': 0,
-                        'emails': 0
+                        'patch': 0
                     };
 
                     for (i = 0; i < tableData.length; i++) {
@@ -78,7 +77,6 @@
                         summary.commits += tableData[i].commit;
                         summary.reviews += tableData[i].review;
                         summary.patch += tableData[i].patch;
-                        summary.emails += tableData[i].email;
                     }
 
                     if (table_id) {
@@ -130,7 +128,6 @@
 <div>On review: <b>${reviews}</b> (${(reviews / {{ days }}).toFixed(1) } per day)</div>
 <div>Patch sets: <b>${patch}</b> (${(patch / {{ days }}).toFixed(1) } per day)</div>
 <div>Commits: <b>${commits}</b> (${(commits / {{ days }}).toFixed(1) } per day)</div>
-<div>Emails: <b>${emails}</b> (${(emails / {{ days }}).toFixed(1) } per day)</div>
 </script>
 
 {% endblock %}
@@ -155,7 +152,6 @@
                 <th>Ratio</th>
                 <th>On review / patch sets</th>
                 <th>Commits</th>
-                <th>Emails</th>
             </tr>
         </thead>
         <tbody>

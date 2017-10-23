@@ -26,7 +26,6 @@ from stackalytics.processor import config
 from stackalytics.processor import default_data_processor
 from stackalytics.processor import governance
 from stackalytics.processor import lp
-from stackalytics.processor import mls
 from stackalytics.processor import mps
 from stackalytics.processor import rcs
 from stackalytics.processor import record_processor
@@ -175,14 +174,6 @@ def _process_repo(repo, runtime_storage_inst, record_processor_inst,
                               record_processor_inst, rcs_inst)
 
 
-def _process_mail_list(uri, runtime_storage_inst, record_processor_inst):
-    mail_iterator = mls.log(uri, runtime_storage_inst)
-    mail_iterator_typed = _record_typer(mail_iterator, 'email')
-    processed_mail_iterator = record_processor_inst.process(
-        mail_iterator_typed)
-    runtime_storage_inst.set_records(processed_mail_iterator)
-
-
 def _process_member_list(uri, runtime_storage_inst, record_processor_inst):
     member_iterator = mps.log(uri, runtime_storage_inst,
                               CONF.days_to_update_members,
@@ -224,12 +215,6 @@ def process(runtime_storage_inst, record_processor_inst):
                       rcs_inst)
 
     rcs_inst.close()
-
-    LOG.info('Processing mail lists')
-    mail_lists = runtime_storage_inst.get_by_key('mail_lists') or []
-    for mail_list in mail_lists:
-        _process_mail_list(mail_list, runtime_storage_inst,
-                           record_processor_inst)
 
     _post_process_records(record_processor_inst, repos)
 

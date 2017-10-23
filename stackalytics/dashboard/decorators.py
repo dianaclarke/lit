@@ -360,7 +360,6 @@ def aggregate_filter():
                 'commits': (None, None),
                 'loc': (loc_filter, None),
                 'marks': (mark_filter, mark_finalize),
-                'emails': (incremental_filter, None),
                 'bpd': (incremental_filter, None),
                 'bpc': (incremental_filter, None),
                 'filed-bugs': (incremental_filter, None),

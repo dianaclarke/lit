@@ -216,12 +216,6 @@ default_data = {
                 "additionalProperties": False
             }
         },
-        "mail_lists": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        },
         "member_lists": {
             "type": "array",
             "items": {

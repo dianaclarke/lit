@@ -191,7 +191,7 @@ def get_engineers_extended(records, **kwargs):
         record = decorators.mark_finalize(record)
 
         if not (record['mark'] or record['review'] or record['commit'] or
-                record['email'] or record['patch']):
+                record['patch']):
             return
 
         user = vault.get_user_from_runtime_storage(record['id'])
@@ -211,8 +211,7 @@ def get_engineers_extended(records, **kwargs):
         user_id = record.user_id
         if user_id not in result:
             result[user_id] = {'id': user_id, 'mark': 0, 'review': 0,
-                               'commit': 0, 'email': 0, 'patch': 0,
-                               'metric': 0}
+                               'commit': 0, 'patch': 0, 'metric': 0}
         record_processing(result, record, 'user_id')
         result[user_id]['name'] = record.author_name
 

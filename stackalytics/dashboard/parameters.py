@@ -31,7 +31,6 @@ METRIC_LABELS = {
     'loc': 'Lines of code',
     'commits': 'Commits',
     'marks': 'Reviews',
-    'emails': 'Emails',
     'bpd': 'Drafted Blueprints',
     'bpc': 'Completed Blueprints',
     'filed-bugs': 'Filed Bugs',
@@ -44,13 +43,12 @@ METRIC_TO_RECORD_TYPE = {
     'loc': ['commit'],
     'commits': ['commit'],
     'marks': ['mark'],
-    'emails': ['email'],
     'bpd': ['bpd'],
     'bpc': ['bpc'],
     'filed-bugs': ['bugf'],
     'resolved-bugs': ['bugr'],
     'members': ['member'],
-    'person-day': ['mark', 'patch', 'email', 'bpd', 'bugf'],
+    'person-day': ['mark', 'patch', 'bpd', 'bugf'],
     'patches': ['patch'],
 }
 

@@ -129,28 +129,6 @@
           <div>Change Id: <a href="{{ record.parent_url }}"
                              target="_blank">{{ record.review_id }}</a></div>
 
-        {% elif record.record_type == "email" %}
-          <div class="header">
-            {% if email_link != "" %}
-              <a href='{{ record.email_link }}'>
-            {% endif %}
-            Email &ldquo;{{ record.subject }}&rdquo;
-            {% if email_link != "" %}
-              </a>
-            {% endif %}
-          </div>
-          {% if blueprint_id_count %}
-            <div>Mentions blueprints:
-              {% for value in blueprint_links %}
-                {{ value | safe }}
-              {% endfor %}
-            </div>
-          {% endif %}
-          {% if body %}
-            <div>Email:</div>
-            <div class="tweet">{{ record.body }}</div>
-          {% endif %}
-
         {% elif ((record.record_type == "bpd") or (record.record_type == "bpc")) %}
           <div class="header">Blueprint &ldquo;{{ record.title }}&rdquo;
             ({{ blueprint_link | safe }})
