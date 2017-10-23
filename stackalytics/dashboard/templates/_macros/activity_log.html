@@ -153,10 +153,6 @@ show_twitter=False) -%}
         {%elif record_type == "patch" %}
             <div class="header">Patch #${number} &ldquo;${parent_subject}&rdquo;</div>
             <div>Change Id: <a href="${parent_url}" target="_blank">${review_id}</a></div>
-        {%elif ((record_type == "bugf") || (record_type == "bugr")) %}
-            <div class="header">Bug &ldquo;${title}&rdquo; (<a href="${web_link}" class="ext_link">${number}</a>)</div>
-            <div>Status: <span class="status${status_class}">${status}</span></div>
-            <div>Importance: <span class="importance${importance}">${importance}</span></div>
         {%/if%}
 
         {%if tweet %}

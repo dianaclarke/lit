@@ -21,7 +21,6 @@ from oslo_log import log as logging
 import psutil
 import six
 
-from stackalytics.processor import bps
 from stackalytics.processor import config
 from stackalytics.processor import default_data_processor
 from stackalytics.processor import rcs
@@ -78,23 +77,6 @@ def _get_repo_branches(repo):
                 if 'branch' in r))
 
 
-def _process_repo_bugs(repo, runtime_storage_inst, record_processor_inst):
-    LOG.info('Processing bugs for repo: %s', repo['uri'])
-
-    current_date = utils.date_to_timestamp('now')
-    bug_modified_since = runtime_storage_inst.get_by_key(
-        'bug_modified_since-%s' % repo['module'])
-
-    bug_iterator = bps.log(repo, bug_modified_since)
-    bug_iterator_typed = _record_typer(bug_iterator, 'bug')
-    processed_bug_iterator = record_processor_inst.process(bug_iterator_typed)
-
-    runtime_storage_inst.set_records(processed_bug_iterator,
-                                     utils.merge_records)
-    runtime_storage_inst.set_by_key('bug_modified_since-%s' % repo['module'],
-                                    current_date)
-
-
 def _process_repo_reviews(repo, runtime_storage_inst, record_processor_inst,
                           rcs_inst):
     for branch in _get_repo_branches(repo):
@@ -149,8 +131,6 @@ def _process_repo(repo, runtime_storage_inst, record_processor_inst,
     LOG.info('Processing repo: %s', repo['uri'])
 
     _process_repo_vcs(repo, runtime_storage_inst, record_processor_inst)
-
-    _process_repo_bugs(repo, runtime_storage_inst, record_processor_inst)
 
     if 'has_gerrit' in repo:
         _process_repo_reviews(repo, runtime_storage_inst,

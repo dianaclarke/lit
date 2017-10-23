@@ -257,13 +257,6 @@ def merge_records(original, new):
     return need_update
 
 
-def make_bug_id(bug_id, module, release=None):
-    if release:
-        return '/'.join([module, release, bug_id])
-    else:
-        return '/'.join([module, bug_id])
-
-
 def get_patch_id(review_id, patch_number):
     return '%s:%s' % (review_id, patch_number)
 

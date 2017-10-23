@@ -43,7 +43,6 @@ def _extend_record_common_fields(record):
     record['module_link'] = make_link(
         record['module'], '/',
         {'module': record['module'], 'company': '', 'user_id': ''})
-    record['bug_id_count'] = len(record.get('bug_id', []))
 
     for coauthor in record.get('coauthor') or []:
         _extend_author_fields(coauthor)
@@ -81,10 +80,6 @@ def extend_record(record):
         review = vault.get_memory_storage().get_record_by_primary_key(
             record['review_id'])
         _extend_by_parent_info(record, review, 'parent_')
-    elif record['record_type'] in ['bugr', 'bugf']:
-        record['number'] = record['web_link'].split('/')[-1]
-        record['title'] = filter_bug_title(record['title'])
-        record['status_class'] = re.sub('\s+', '', record['status'])
 
     return record
 
@@ -177,8 +172,6 @@ def get_contribution_summary(records):
     marks = dict((m, 0) for m in [-2, -1, 0, 1, 2, 'A', 'WIP', 'x', 's'])
     commit_count = 0
     loc = 0
-    filed_bug_count = 0
-    resolved_bug_count = 0
     patch_set_count = 0
     change_request_count = 0
     abandoned_change_requests_count = 0
@@ -202,10 +195,6 @@ def get_contribution_summary(records):
             elif record.type[:5] == 'Self-':
                 value = 's'
             marks[value] += 1
-        elif record_type == 'bugf':
-            filed_bug_count += 1
-        elif record_type == 'bugr':
-            resolved_bug_count += 1
         elif record_type == 'patch':
             patch_set_count += 1
         elif record_type == 'review':
@@ -217,8 +206,6 @@ def get_contribution_summary(records):
         'commit_count': commit_count,
         'loc': loc,
         'marks': marks,
-        'filed_bug_count': filed_bug_count,
-        'resolved_bug_count': resolved_bug_count,
         'patch_set_count': patch_set_count,
         'change_request_count': change_request_count,
         'abandoned_change_requests_count': abandoned_change_requests_count,

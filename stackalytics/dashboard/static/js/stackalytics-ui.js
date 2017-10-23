@@ -288,12 +288,6 @@ function extendWithTweet(record) {
         tweet = record.status + " change request by " + record.author_name + " in " + record.module;
     } else if (record.record_type == "patch") {
         tweet = record.author_name + " submitted «" + record.parent_subject + "» in " + record.module;
-    } else if (record.record_type == "email") {
-        tweet = record.author_name + " emails about " + record.subject;
-    } else if (record.record_type == "bugf" || record.record_type == "bugr") {
-        tweet = record.status + " bug «" + record.title + "» in " + record.module + " " + record.web_link;
-    } else if (record.record_type == "tr") {
-        tweet = record.author_name + " translated " + record.loc + " words into " + record.language;
     }
 
     record.tweet = tweet;

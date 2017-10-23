@@ -216,9 +216,6 @@ function makeKpiRequestOptions(release, metric, module, duration) {
 function runMakeStatement(statement, verb, count, noun, duration, item_type, item_id, module, release, container) {
     var metric = noun;
 
-    if (noun == "bugs") {
-        metric = (verb == "file") ? "filed-bugs" : "resolved-bugs";
-    }
     if (noun == "reviews") {
         metric = "marks";
     }

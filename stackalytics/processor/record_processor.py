@@ -334,40 +334,6 @@ class RecordProcessor(object):
         elif record['module'] in alias_module_map:
             record['module'] = alias_module_map[record['module']]
 
-    def _process_bug(self, record):
-
-        bug_created = record.copy()
-        bug_created['primary_key'] = 'bugf:' + record['id']
-        bug_created['record_type'] = 'bugf'
-        bug_created['launchpad_id'] = record.get('owner')
-        bug_created['date'] = record['date_created']
-
-        self._update_record_and_user(bug_created)
-
-        yield bug_created
-
-        FIXED_BUGS = ['Fix Committed', 'Fix Released']
-        if (('date_fix_committed' in record or 'date_fix_released' in record)
-                and record['status'] in FIXED_BUGS):
-            bug_fixed = record.copy()
-            bug_fixed['primary_key'] = 'bugr:' + record['id']
-            bug_fixed['record_type'] = 'bugr'
-            bug_fixed['launchpad_id'] = record.get('assignee') or '*unassigned'
-            # It appears that launchpad automatically sets the
-            # date_fix_committed field when a bug moves from an open
-            # state to Fix Released, however it isn't clear that this
-            # is documented. So, we take the commit date if it is
-            # present or the release date if no commit date is
-            # present.
-            bug_fixed['date'] = (
-                record.get('date_fix_committed') or
-                record['date_fix_released']
-            )
-
-            self._update_record_and_user(bug_fixed)
-
-            yield bug_fixed
-
     def _renew_record_date(self, record):
         record['week'] = utils.timestamp_to_week(record['date'])
         if ('release' not in record) or (not record['release']):
@@ -377,7 +343,6 @@ class RecordProcessor(object):
         PROCESSORS = {
             'commit': self._process_commit,
             'review': self._process_review,
-            'bug': self._process_bug,
         }
 
         for record in record_iterator:

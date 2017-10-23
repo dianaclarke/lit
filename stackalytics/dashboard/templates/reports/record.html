@@ -129,18 +129,6 @@
           <div>Change Id: <a href="{{ record.parent_url }}"
                              target="_blank">{{ record.review_id }}</a></div>
 
-        {% elif ((record.record_type == "bugf") or (record.record_type == "bugr")) %}
-          <div class="header">Bug &ldquo;{{ record.title }}&rdquo; (<a
-              href="{{ record.web_link }}"
-              class="ext_link">{{ record.number }}</a>)
-          </div>
-          <div>Status: <span
-              class="status{{ record.status_class }}">{{ record.status }}</span>
-          </div>
-          <div>Importance: <span
-              class="importance{{ record.importance }}">{{ record.importance }}</span>
-          </div>
-
         {% elif record.record_type == "ci" %}
           <div class="header">CI vote in merged change request
             <a href="https://review.openstack.org/#/c/{{ record.review_number }}"

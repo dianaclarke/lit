@@ -31,8 +31,6 @@ METRIC_LABELS = {
     'loc': 'Lines of code',
     'commits': 'Commits',
     'marks': 'Reviews',
-    'filed-bugs': 'Filed Bugs',
-    'resolved-bugs': 'Resolved Bugs',
     'person-day': "Person-day effort",
     'patches': 'Patch Sets',
 }
@@ -41,9 +39,7 @@ METRIC_TO_RECORD_TYPE = {
     'loc': ['commit'],
     'commits': ['commit'],
     'marks': ['mark'],
-    'filed-bugs': ['bugf'],
-    'resolved-bugs': ['bugr'],
-    'person-day': ['mark', 'patch', 'bugf'],
+    'person-day': ['mark', 'patch'],
     'patches': ['patch'],
 }
 
