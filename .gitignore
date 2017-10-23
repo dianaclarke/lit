@@ -2,8 +2,6 @@
 *.pyc
 *.local
 default_data.json
-xAUTHORS
-ChangeLog
 MANIFEST
 dist/
 .venv/
