@@ -302,8 +302,6 @@
         }
     ],
 
-    "member_lists": ["http://www.openstack.org/community/members/profile/"],
-
     "project_types": [
         {
             "id": "all",

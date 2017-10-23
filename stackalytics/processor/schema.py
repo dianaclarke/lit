@@ -216,12 +216,6 @@ default_data = {
                 "additionalProperties": False
             }
         },
-        "member_lists": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        },
         "project_types": {
             "type": "array",
             "items": {

@@ -25,7 +25,6 @@ from stackalytics.processor import bps
 from stackalytics.processor import config
 from stackalytics.processor import default_data_processor
 from stackalytics.processor import governance
-from stackalytics.processor import mps
 from stackalytics.processor import rcs
 from stackalytics.processor import record_processor
 from stackalytics.processor import runtime_storage
@@ -159,23 +158,6 @@ def _process_repo(repo, runtime_storage_inst, record_processor_inst,
                               record_processor_inst, rcs_inst)
 
 
-def _process_member_list(uri, runtime_storage_inst, record_processor_inst):
-    member_iterator = mps.log(uri, runtime_storage_inst,
-                              CONF.days_to_update_members,
-                              CONF.members_look_ahead)
-    member_iterator_typed = _record_typer(member_iterator, 'member')
-    processed_member_iterator = record_processor_inst.process(
-        member_iterator_typed)
-    runtime_storage_inst.set_records(processed_member_iterator)
-
-
-def update_members(runtime_storage_inst, record_processor_inst):
-    member_lists = runtime_storage_inst.get_by_key('member_lists') or []
-    for member_list in member_lists:
-        _process_member_list(member_list, runtime_storage_inst,
-                             record_processor_inst)
-
-
 def _post_process_records(record_processor_inst, repos):
     LOG.debug('Build release index')
     release_index = {}
@@ -264,9 +246,6 @@ def main():
         runtime_storage_inst)
 
     process(runtime_storage_inst, record_processor_inst)
-
-    # long operation should be the last
-    update_members(runtime_storage_inst, record_processor_inst)
 
     runtime_storage_inst.set_by_key('runtime_storage_update_time',
                                     utils.date_to_timestamp('now'))
