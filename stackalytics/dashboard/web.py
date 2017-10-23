@@ -26,7 +26,6 @@ import six
 from stackalytics.dashboard import config
 from stackalytics.dashboard import decorators
 from stackalytics.dashboard import helpers
-from stackalytics.dashboard import kpi
 from stackalytics.dashboard import parameters
 from stackalytics.dashboard import reports
 from stackalytics.dashboard import vault
@@ -39,7 +38,6 @@ app = flask.Flask(__name__)
 app.config.from_object(__name__)
 app.config.from_envvar('DASHBOARD_CONF', silent=True)
 app.register_blueprint(reports.blueprint)
-app.register_blueprint(kpi.blueprint)
 
 LOG = logging.getLogger(__name__)
 
