@@ -17,7 +17,6 @@
 DEFAULT_DATA = {
     'users': [
         {
-            'launchpad_id': 'john_doe',
             'user_name': 'John Doe',
             'emails': ['johndoe@gmail.com', 'jdoe@nec.com'],
             'companies': [
@@ -26,7 +25,6 @@ DEFAULT_DATA = {
             ]
         },
         {
-            'launchpad_id': 'smith',
             'user_name': 'Smith',
             'emails': ['smith@gmail.com', 'smith@nec.com'],
             'companies': [
@@ -35,7 +33,6 @@ DEFAULT_DATA = {
             ]
         },
         {
-            'launchpad_id': 'ivan_ivanov',
             'user_name': 'Ivan Ivanov',
             'emails': ['ivanivan@yandex.ru', 'iivanov@mirantis.com'],
             'companies': [

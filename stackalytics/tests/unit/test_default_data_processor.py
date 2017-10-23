@@ -48,9 +48,6 @@ class TestDefaultDataProcessor(testtools.TestCase):
         self.assertEqual(0, data['users'][0]['companies'][-1]['end_date'],
                          message='The last company end date should be 0')
         self.assertIn('user_id', data['users'][0])
-        self.assertEqual(test_data.USERS[0]['launchpad_id'],
-                         data['users'][0]['user_id'],
-                         message='User id should be set')
 
         # verify that *independent company is added automatically
         self.assertEqual(3, len(data['users'][1]['companies']))

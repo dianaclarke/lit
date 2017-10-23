@@ -23,10 +23,6 @@ default_data = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "launchpad_id": {
-                        "type": "string",
-                        "pattern": "^[a-z\\d\\.\\+-]+$"
-                    },
                     "github_id": {
                         "type": "string"
                     },

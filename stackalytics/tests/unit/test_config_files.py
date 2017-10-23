@@ -141,14 +141,6 @@ class TestConfigFiles(testtools.TestCase):
         users = self._read_file(file_name)['users']
         storage = {}
         for user in users:
-            if user.get('launchpad_id'):
-                field = user['launchpad_id']
-                self.assertNotIn(
-                    field, storage,
-                    'Duplicate launchpad_id %s, collision between: %s and %s'
-                    % (field, storage.get(field), user))
-                storage[field] = user
-
             if user.get('gerrit_id'):
                 field = user['gerrit_id']
                 self.assertNotIn(

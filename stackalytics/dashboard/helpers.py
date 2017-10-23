@@ -222,10 +222,6 @@ def format_date(timestamp):
     return datetime.datetime.utcfromtimestamp(timestamp).strftime('%d %b %Y')
 
 
-def format_launchpad_module_link(module):
-    return '<a href="https://launchpad.net/%s">%s</a>' % (module, module)
-
-
 def make_link(title, uri=None, options=None):
     param_names = ('release', 'project_type', 'module', 'company', 'user_id',
                    'metric')

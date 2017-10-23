@@ -29,15 +29,11 @@ def main():
 
     for u in users:
         user_id = u.get('user_id')
-        lp = u.get('launchpad_id')
         g = u.get('gerrit_id')
         emails = u.get('emails')
 
         if user_id:
             check(u, m.get('user:%s' % user_id.encode('utf8')))
-
-        if lp:
-            check(u, m.get('user:%s' % lp.encode('utf8')))
 
         if g:
             check(u, m.get('user:gerrit:%s' % g.encode('utf8')))

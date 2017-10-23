@@ -23,7 +23,6 @@ from oslo_config import cfg
 from oslo_log import log as logging
 import six
 
-from stackalytics.processor import launchpad_utils
 from stackalytics.processor import user_processor
 from stackalytics.processor import utils
 
@@ -79,63 +78,35 @@ class RecordProcessor(object):
 
         return self.modules, self.alias_module_map
 
-    def _need_to_fetch_launchpad(self):
-        return CONF.fetching_user_source == 'launchpad'
-
     def _update_user(self, record):
         email = record.get('author_email')
+        user_name = record.get('author_name')
+
         user_e = user_processor.load_user(
             self.runtime_storage_inst, email=email) or {}
-
-        user_name = record.get('author_name')
-        launchpad_id = record.get('launchpad_id')
-        if (self._need_to_fetch_launchpad() and email and (not user_e) and
-                (not launchpad_id) and (not user_e.get('launchpad_id'))):
-            # query LP
-            launchpad_id, lp_user_name = launchpad_utils.query_lp_info(email)
-            if lp_user_name:
-                user_name = lp_user_name
 
         gerrit_id = record.get('gerrit_id')
         if gerrit_id:
             user_g = user_processor.load_user(
                 self.runtime_storage_inst, gerrit_id=gerrit_id) or {}
-            if (self._need_to_fetch_launchpad() and (not user_g) and
-                    (not launchpad_id) and (not user_e.get('launchpad_id'))):
-                # query LP
-                guessed_lp_id = gerrit_id
-                lp_user_name = launchpad_utils.query_lp_user_name(
-                    guessed_lp_id)
-                if lp_user_name == user_name:
-                    launchpad_id = guessed_lp_id
         else:
             user_g = {}
 
-        user_l = user_processor.load_user(
-            self.runtime_storage_inst, launchpad_id=launchpad_id) or {}
-
-        if user_processor.are_users_same([user_e, user_l, user_g]):
+        if user_processor.are_users_same([user_e, user_g]):
             # If sequence numbers are set and the same, merge is not needed
             return user_e
 
         user = user_processor.create_user(
-            self.domains_index, launchpad_id, email, gerrit_id, user_name)
+            self.domains_index, email, gerrit_id, user_name)
 
-        if user_e or user_l or user_g:
+        if user_e or user_g:
             # merge between existing profiles and a new one
             user, users_to_delete = user_processor.merge_user_profiles(
-                self.domains_index, [user_e, user_l, user_g, user])
+                self.domains_index, [user_e, user_g, user])
 
             # delete all unneeded profiles
             user_processor.delete_users(
                 self.runtime_storage_inst, users_to_delete)
-        else:
-            # create new profile
-            if (self._need_to_fetch_launchpad() and not user_name):
-                user_name = launchpad_utils.query_lp_user_name(launchpad_id)
-                if user_name:
-                    user['user_name'] = user_name
-            LOG.debug('Created new user: %s', user)
 
         user_processor.store_user(self.runtime_storage_inst, user)
         LOG.debug('Stored user: %s', user)

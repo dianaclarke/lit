@@ -23,7 +23,6 @@ class TestUserProcessor(testtools.TestCase):
 
     def test_update_user(self):
         user = {
-            "launchpad_id": "user",
             "companies": [
                 {
                     "company_name": "Rackspace",
@@ -39,7 +38,6 @@ class TestUserProcessor(testtools.TestCase):
         }
 
         stored_user = {
-            "launchpad_id": "user",
             "companies": [
                 {
                     "company_name": "Rackspace",
@@ -67,7 +65,6 @@ class TestUserProcessor(testtools.TestCase):
 
     def test_update_user_unknown_user(self):
         user = {
-            "launchpad_id": "user",
             "companies": [
                 {
                     "company_name": "Rackspace",

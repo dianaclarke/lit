@@ -120,9 +120,8 @@ class CachedMemoryStorage(MemoryStorage):
             map(self.get_original_company_name, companies),
             self.company_index)
 
-    def get_record_ids_by_user_ids(self, launchpad_ids):
-        return self._get_record_ids_from_index(launchpad_ids,
-                                               self.user_id_index)
+    def get_record_ids_by_user_ids(self, user_ids):
+        return self._get_record_ids_from_index(user_ids, self.user_id_index)
 
     def get_record_ids_by_releases(self, releases):
         return self._get_record_ids_from_index(releases, self.release_index)

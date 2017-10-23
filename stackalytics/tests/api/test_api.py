@@ -110,7 +110,7 @@ def _generate_commits():
             'lines_deleted': 1, 'week': 2275,
             'bug_id': u'1212953',
             'files_changed': 1, 'author_name': u'John Doe',
-            'date': 1376737923, 'launchpad_id': u'john_doe',
+            'date': 1376737923,
             'branches': set([u'master']),
             'change_id': u'I33f0f37b6460dc494abf2520dc109c9893ace9e6',
             'release': u'icehouse'
@@ -120,7 +120,7 @@ def _generate_commits():
 
 def _generate_marks():
         mark = {
-            'launchpad_id': 'john_doe', 'week': 2294, 'user_id': 'john_doe',
+            'week': 2294, 'user_id': 'john_doe',
             'description': 'Approved', 'author_name': 'John Doe',
             'author_email': 'john_doe@gmail.com',
             'primary_key': uuidutils.generate_uuid() + 'Workflow',
@@ -143,7 +143,7 @@ def _generate_review():
         'primary_key': 'Ibc0d1fa7626629c28c514514a985a6b89db2ac69',
         'author_email': 'john_doe@gmail.com', 'company_name': '*independent',
         'branch': 'master',
-        'launchpad_id': 'john_doe', 'lastUpdated': 1387865203,
+        'lastUpdated': 1387865203,
         'author_name': 'John Doe', 'date': 1386547707,
         'url': 'https://review.openstack.org/60721',
         'sortKey': '0029f92e0000ed31', 'project': 'openstack/glance',

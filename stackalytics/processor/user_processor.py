@@ -23,10 +23,9 @@ INDEPENDENT = '*independent'
 ROBOTS = '*robots'
 
 
-def make_user_id(emails=None, launchpad_id=None, gerrit_id=None,
-                 github_id=None):
-    if launchpad_id or emails:
-        return launchpad_id or emails[0]
+def make_user_id(emails=None, gerrit_id=None, github_id=None):
+    if emails:
+        return emails[0]
     if gerrit_id:
         return 'gerrit:%s' % gerrit_id
     if github_id:
@@ -42,8 +41,6 @@ def store_user(runtime_storage_inst, user):
     runtime_storage_inst.set_by_key('user:%d' % user['seq'], user)
     if user.get('user_id'):
         runtime_storage_inst.set_by_key('user:%s' % user['user_id'], user)
-    if user.get('launchpad_id'):
-        runtime_storage_inst.set_by_key('user:%s' % user['launchpad_id'], user)
     if user.get('gerrit_id'):
         runtime_storage_inst.set_by_key('user:gerrit:%s' % user['gerrit_id'],
                                         user)
@@ -55,11 +52,11 @@ def store_user(runtime_storage_inst, user):
 
 
 def load_user(runtime_storage_inst, seq=None, user_id=None, email=None,
-              launchpad_id=None, gerrit_id=None, github_id=None):
+              gerrit_id=None, github_id=None):
 
     key = make_user_id(gerrit_id=gerrit_id, github_id=github_id)
     if not key:
-        key = seq or user_id or launchpad_id or email
+        key = seq or user_id or email
     if key:
         return runtime_storage_inst.get_by_key('user:%s' % key)
     return None
@@ -114,14 +111,12 @@ def get_company_by_email(domains_index, email):
     return None
 
 
-def create_user(domains_index, launchpad_id, email, gerrit_id, user_name):
+def create_user(domains_index, email, gerrit_id, user_name):
     company = get_company_by_email(domains_index, email) or INDEPENDENT
     emails = [email] if email else []
 
     user = {
-        'user_id': make_user_id(
-            emails=emails, launchpad_id=launchpad_id, gerrit_id=gerrit_id),
-        'launchpad_id': launchpad_id,
+        'user_id': make_user_id(emails=emails, gerrit_id=gerrit_id),
         'user_name': user_name or '',
         'companies': [{
             'company_name': company,
@@ -169,12 +164,6 @@ def merge_user_profiles(domains_index, user_profiles):
     """
     LOG.debug('Merge profiles: %s', user_profiles)
 
-    # check of there are more than 1 launchpad_id nor gerrit_id
-    lp_ids = set(u.get('launchpad_id') for u in user_profiles
-                 if u.get('launchpad_id'))
-    if len(lp_ids) > 1:
-        LOG.debug('Ambiguous launchpad ids: %s on profiles: %s',
-                  lp_ids, user_profiles)
     g_ids = set(u.get('gerrit_id') for u in user_profiles
                 if u.get('gerrit_id'))
     if len(g_ids) > 1:
@@ -185,15 +174,11 @@ def merge_user_profiles(domains_index, user_profiles):
 
     # collect ordinary fields
     for key in ['seq', 'user_name', 'user_id', 'gerrit_id', 'github_id',
-                'launchpad_id', 'companies', 'static']:
+                'companies', 'static']:
         value = next((v.get(key) for v in user_profiles if v.get(key)),
                      None)
         if value:
             merged_user[key] = value
-
-    # update user_id, prefer it to be equal to launchpad_id
-    merged_user['user_id'] = (merged_user.get('launchpad_id') or
-                              merged_user.get('user_id'))
 
     # merge emails
     emails = set([])
