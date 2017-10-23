@@ -225,9 +225,9 @@ def process(runtime_storage_inst, record_processor_inst):
     repos = utils.load_repos(runtime_storage_inst)
 
     rcs_inst = rcs.get_rcs(CONF.review_uri)
-    rcs_inst.setup(key_filename=CONF.ssh_key_filename,
-                   username=CONF.ssh_username,
-                   gerrit_retry=CONF.gerrit_retry)
+#     rcs_inst.setup(key_filename=CONF.ssh_key_filename,
+#                    username=CONF.ssh_username,
+#                    gerrit_retry=CONF.gerrit_retry)
 
     for repo in repos:
         _process_repo(repo, runtime_storage_inst, record_processor_inst,
