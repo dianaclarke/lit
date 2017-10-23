@@ -24,7 +24,6 @@ import six
 from stackalytics.processor import bps
 from stackalytics.processor import config
 from stackalytics.processor import default_data_processor
-from stackalytics.processor import governance
 from stackalytics.processor import rcs
 from stackalytics.processor import record_processor
 from stackalytics.processor import runtime_storage
@@ -188,22 +187,6 @@ def process(runtime_storage_inst, record_processor_inst):
 
 def process_project_list(runtime_storage_inst):
     module_groups = runtime_storage_inst.get_by_key('module_groups') or {}
-    releases = runtime_storage_inst.get_by_key('releases') or {}
-
-    official_module_groups = governance.process_official_list(releases)
-
-    LOG.debug('Update module groups with official: %s', official_module_groups)
-    module_groups.update(official_module_groups)
-
-    # make list of OpenStack unofficial projects
-    others = module_groups.get('openstack-others')
-    off_rm = module_groups.get('openstack-official', {}).get('releases')
-    official = dict((r, set(m)) for r, m in six.iteritems(off_rm))
-
-    for module in module_groups.get('openstack', {}).get('modules', []):
-        for r, off_m in six.iteritems(official):
-            if module not in off_m:
-                others['releases'][r].add(module)
 
     # register modules as module groups
     repos = runtime_storage_inst.get_by_key('repos') or []
