@@ -42,10 +42,6 @@ PROCESSOR_OPTS = [
                help='SSH key for gerrit review system access'),
     cfg.StrOpt('ssh-username', default='user',
                help='SSH username for gerrit review system access'),
-    cfg.StrOpt('translation-team-uri',
-               default='https://git.openstack.org/cgit/openstack/i18n/'
-                       'plain/tools/zanata/translation_team.yaml',
-               help='URI of translation team data'),
     cfg.StrOpt("fetching-user-source", default='launchpad',
                choices=['launchpad', '<None>'],
                help="Source for fetching user profiles"),

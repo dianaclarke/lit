@@ -63,7 +63,7 @@
 
         <div class="header">{{ record.date_str }}
           in {{ record.module_link | safe }}
-          {% if record.record_type in ["mark", "review", "patch", "ci", "tr"] %}
+          {% if record.record_type in ["mark", "review", "patch", "ci"] %}
             {% if record.branch != "master" %}({{ record.branch }}){% endif %}
           {% endif %}
           {% if record.record_type == "commit" %}
@@ -202,11 +202,6 @@
                                  target="_blank">Registered</a> in OpenStack
             Foundation
           </div>
-
-        {% elif record_type == "tr" %}
-          <div class="header">Translated {{ record.loc }} words
-            into {{ record.language }}</div>
-        {% endif %}
 
         <div style="margin-top: 1em;" id="tweet"></div>
 

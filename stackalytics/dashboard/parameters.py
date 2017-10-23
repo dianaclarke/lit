@@ -38,7 +38,6 @@ METRIC_LABELS = {
     'resolved-bugs': 'Resolved Bugs',
     'person-day': "Person-day effort",
     'patches': 'Patch Sets',
-    'translations': 'Translations',
 }
 
 METRIC_TO_RECORD_TYPE = {
@@ -53,7 +52,6 @@ METRIC_TO_RECORD_TYPE = {
     'members': ['member'],
     'person-day': ['mark', 'patch', 'email', 'bpd', 'bugf'],
     'patches': ['patch'],
-    'translations': ['tr'],
 }
 
 FILTER_PARAMETERS = ['release', 'project_type', 'module', 'company', 'user_id',

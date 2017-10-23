@@ -368,7 +368,6 @@ def aggregate_filter():
                 'members': (incremental_filter, None),
                 'person-day': (person_day_filter, None),
                 'patches': (None, None),
-                'translations': (loc_filter, None),
             }
             if metric not in metric_to_filters_map:
                 metric = parameters.get_default('metric')

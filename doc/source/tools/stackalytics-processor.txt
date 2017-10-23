@@ -17,7 +17,6 @@ usage: stackalytics-processor [-h] [--config-dir DIR] [--config-file PATH]
                               [--ssh-key-filename SSH_KEY_FILENAME]
                               [--ssh-username SSH_USERNAME]
                               [--syslog-log-facility SYSLOG_LOG_FACILITY]
-                              [--translation-team-uri TRANSLATION_TEAM_URI]
                               [--use-journal] [--use-syslog]
                               [--watch-log-file]
 
@@ -89,8 +88,6 @@ optional arguments:
   --syslog-log-facility SYSLOG_LOG_FACILITY
                         Syslog facility to receive log lines. This option is
                         ignored if log_config_append is set.
-  --translation-team-uri TRANSLATION_TEAM_URI
-                        URI of translation team data
   --use-journal         Enable journald for logging. If running in a systemd
                         environment you may wish to enable journal support.
                         Doing so will use the journal native protocol which

@@ -111,35 +111,20 @@ class RecordProcessor(object):
         else:
             user_g = {}
 
-        zanata_id = record.get('zanata_id')
-        if zanata_id:
-            user_z = user_processor.load_user(
-                self.runtime_storage_inst, zanata_id=zanata_id) or {}
-            if (self._need_to_fetch_launchpad() and (not user_z) and
-                    (not launchpad_id) and (not user_e.get('launchpad_id'))):
-                # query LP
-                guessed_lp_id = zanata_id
-                user_name = launchpad_utils.query_lp_user_name(guessed_lp_id)
-                if user_name != guessed_lp_id:
-                    launchpad_id = guessed_lp_id
-        else:
-            user_z = {}
-
         user_l = user_processor.load_user(
             self.runtime_storage_inst, launchpad_id=launchpad_id) or {}
 
-        if user_processor.are_users_same([user_e, user_l, user_g, user_z]):
+        if user_processor.are_users_same([user_e, user_l, user_g]):
             # If sequence numbers are set and the same, merge is not needed
             return user_e
 
         user = user_processor.create_user(
-            self.domains_index, launchpad_id, email, gerrit_id, zanata_id,
-            user_name)
+            self.domains_index, launchpad_id, email, gerrit_id, user_name)
 
-        if user_e or user_l or user_g or user_z:
+        if user_e or user_l or user_g:
             # merge between existing profiles and a new one
             user, users_to_delete = user_processor.merge_user_profiles(
-                self.domains_index, [user_e, user_l, user_g, user_z, user])
+                self.domains_index, [user_e, user_l, user_g, user])
 
             # delete all unneeded profiles
             user_processor.delete_users(
@@ -458,24 +443,6 @@ class RecordProcessor(object):
 
         yield record
 
-    def _process_translation(self, record):
-        # todo split translation and approval
-        translation = record.copy()
-        user_id = user_processor.make_user_id(zanata_id=record['zanata_id'])
-
-        translation['record_type'] = 'tr'
-        translation['primary_key'] = '%s:%s:%s:%s' % (
-            user_id, record['module'], record['date'], record['branch'])
-        translation['author_name'] = user_id
-
-        # following fields are put into standard fields stored in dashboard mem
-        translation['loc'] = record['translated']
-        translation['value'] = record['language']
-
-        self._update_record_and_user(translation)
-
-        yield translation
-
     def _renew_record_date(self, record):
         record['week'] = utils.timestamp_to_week(record['date'])
         if ('release' not in record) or (not record['release']):
@@ -489,7 +456,6 @@ class RecordProcessor(object):
             'bp': self._process_blueprint,
             'bug': self._process_bug,
             'member': self._process_member,
-            'i18n': self._process_translation,
         }
 
         for record in record_iterator:

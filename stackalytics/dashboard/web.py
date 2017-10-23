@@ -403,32 +403,6 @@ def get_bpd(records, **kwargs):
     return result
 
 
-@app.route('/api/1.0/stats/languages')
-@decorators.exception_handler()
-@decorators.response()
-@decorators.cached()
-@decorators.jsonify('stats')
-@decorators.record_filter()
-def get_languages(records, **kwargs):
-    result = []
-    languages = collections.defaultdict(int)
-    for record in records:
-        if record.record_type in ['tr']:
-            languages[record.value] += record.loc
-
-    for lang, val in six.iteritems(languages):
-        result.append({
-            'id': lang,
-            'name': lang,
-            'metric': val,
-        })
-
-    result.sort(key=lambda x: x['metric'], reverse=True)
-    utils.add_index(result)
-
-    return result
-
-
 @app.route('/api/1.0/users')
 @decorators.exception_handler()
 @decorators.response()
@@ -618,8 +592,6 @@ def timeline(records, **kwargs):
     week_stat_commits_hl = dict((c, 0) for c in weeks)
 
     commits_handler = lambda record: 1
-    if 'translations' in metric:
-        commits_handler = lambda record: record.loc
 
     if ('commits' in metric) or ('loc' in metric):
         loc_handler = lambda record: record.loc
